@@ -1,6 +1,6 @@
 # Black Statusbar: hide the MacBook notch with a black menu bar
 
-**Black Statusbar is a free, tiny macOS app that turns the menu bar black on MacBooks with a notch, so the notch blends in and disappears.** It works on every MacBook Pro and MacBook Air with a notch (M1 Pro, M1 Max, M2, M3, M4, M5 and later), and it never touches your wallpaper.
+**Black Statusbar is a free, open-source, tiny macOS app that turns the menu bar black on MacBooks with a notch, so the notch blends in and disappears.** It works on every MacBook Pro and MacBook Air with a notch (M1 Pro, M1 Max, M2, M3, M4, M5 and later), and it never touches your wallpaper.
 
 ## Why hide the notch?
 
@@ -89,3 +89,7 @@ Run the built-in check with `~/.local/bin/black-statusbar --self-test`.
 - **Change the display resolution.** In System Settings > Displays, choose a resolution that ends below the notch. You lose a strip of screen space.
 - **Scale one app below the camera.** In Finder, select the app, choose Get Info and turn on "Scale to fit below built-in camera". This only affects that app.
 - **Use full-screen mode.** Full-screen apps already black out the area around the notch.
+
+## License
+
+[MIT](LICENSE). Anyone is free to use, modify and share it, at their own risk: it comes with no warranty.
