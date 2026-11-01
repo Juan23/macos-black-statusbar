@@ -13,6 +13,7 @@ DOMAIN="gui/$(id -u)"
 if [ "$1" = uninstall ]; then
   launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
   rm -f "$PLIST" "$BIN"
+  defaults delete black-statusbar 2>/dev/null || true
   echo "Removed black-statusbar."
   exit 0
 fi

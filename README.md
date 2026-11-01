@@ -61,6 +61,8 @@ No. Some notch-hiding apps add a black band to your wallpaper image and have to 
 
 macOS chooses the menu bar text colour from your wallpaper, and no app can change that choice. On a very bright wallpaper the text turns black, which would vanish on a black bar. The strip steps aside so you can still read the menus, and it comes back as soon as the wallpaper is darker. Dark and mid-tone wallpapers keep the bar black; even a plain 60% grey does.
 
+Each display has its own wallpaper. When you plug in a monitor, macOS can give the laptop screen a different one, such as the macOS default, so check System Settings > Wallpaper if the bar stops being black.
+
 ### Does it work with full-screen apps?
 
 Full-screen apps already show a black bar around the notch, so Black Statusbar stays out of full-screen spaces.
@@ -79,7 +81,7 @@ For developers:
 
 - A borderless, click-through `NSWindow` sits one level below the main menu window on every screen where `NSScreen.safeAreaInsets.top > 0`. Only notched screens have that top inset.
 - The window joins all Spaces and is rebuilt when displays change: resolution changes, monitors plugged in or out, or the lid closing.
-- A zero-width `NSStatusItem` reports the menu bar's appearance. When macOS switches the menu bar to dark text, the strip hides.
+- A zero-width `NSStatusItem` reports the menu bar's appearance. When macOS switches the menu bar to dark text, the strip hides. The item sits on the active display's menu bar and is checked again whenever it moves, so while an external display is active the strip keeps the colour last seen on the notched screen. That colour is saved, so logging in with an external display active starts from it.
 - A per-user launchd agent with `RunAtLoad` and `KeepAlive` starts it at login.
 
 Run the built-in check with `~/.local/bin/black-statusbar --self-test`.

@@ -27,12 +27,15 @@ var bars: [NSWindow] = []
 
 // macOS picks the menu bar text colour from the wallpaper and turns it black on a very light one.
 // The strip then steps aside so the menus stay readable. A zero-width status item reports that colour.
-// shortcut: the item reports one menu bar; when that is on a screen without a notch the strip hides to be safe,
-// and switching the active display without plugging anything in waits for the next colour change.
+// The item lives on the active display's menu bar, so while an external display is active the colour last seen on the notched screen
+// is kept, and saved so a login with an external display active starts from it. Before it has ever been seen the strip hides to be safe.
+var textIsWhite = UserDefaults.standard.bool(forKey: "textIsWhite")
 @MainActor func showBars() {
     let button = probe.button!
-    let onNotchedScreen = (button.window?.screen?.safeAreaInsets.top ?? 0) > 0
-    let textIsWhite = onNotchedScreen && button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight]) == .vibrantDark
+    if (button.window?.screen?.safeAreaInsets.top ?? 0) > 0 {
+        textIsWhite = button.effectiveAppearance.bestMatch(from: [.vibrantDark, .vibrantLight]) == .vibrantDark
+        UserDefaults.standard.set(textIsWhite, forKey: "textIsWhite")
+    }
     bars.forEach { textIsWhite ? $0.orderFrontRegardless() : $0.orderOut(nil) }
 }
 
@@ -61,5 +64,10 @@ let watch = MainActor.assumeIsolated {  // top-level code runs on the main threa
 // Resolution changes, displays plugged in or out, lid closed.
 NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { _ in
     MainActor.assumeIsolated { rebuild() }
+}
+// The probe moves when another display becomes active; the colour may not change, so look again.
+// Any of our windows, so a replaced status item window is still caught; showBars is cheap.
+NotificationCenter.default.addObserver(forName: NSWindow.didChangeScreenNotification, object: nil, queue: .main) { _ in
+    MainActor.assumeIsolated { showBars() }
 }
 app.run()
